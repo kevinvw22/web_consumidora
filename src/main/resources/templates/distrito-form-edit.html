@@ -86,7 +86,7 @@
   <h1>Editar Distrito</h1>
 
   <div class="form-container">
-    <form th:action="@{/distritos/actualizar/{id}(id=${distritoEditar.id})}" th:object="${distritoEditar}" method="post">
+    <form th:action="@{/distritos/distrito/actualizar/{id}(id=${distritoEditar.id})}" th:object="${distritoEditar}" method="post">
       <input type="hidden" th:field="*{id}" />
       <div>
         <label for="nombreEditar">Nombre:</label>

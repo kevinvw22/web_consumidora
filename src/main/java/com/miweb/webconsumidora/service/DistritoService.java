@@ -17,7 +17,7 @@ public class DistritoService {
     private final RestTemplate restTemplate;
     private final String apiUrlBase;
 
-    public DistritoService(RestTemplate restTemplate, @Value("${api.distritos.url:http://localhost:8080/api/v1/distritos}") String apiUrlBase) {
+    public DistritoService(RestTemplate restTemplate, @Value("${api.distritos.url}") String apiUrlBase) {
         this.restTemplate = restTemplate;
         this.apiUrlBase = apiUrlBase;
     }
