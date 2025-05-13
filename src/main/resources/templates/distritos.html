@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestión de Entidades</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f7f6;
+            color: #333;
+        }
+        .header-container {
+            background-color: #00796b; /* Darker turquoise for header */
+            padding: 10px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            display: flex; /* For logo and nav alignment */
+            align-items: center; /* Vertically center logo and nav */
+            justify-content: space-between; /* Space between logo and nav items */
+            padding-left: calc((100% - 960px) / 2); /* Align with container */
+            padding-right: calc((100% - 960px) / 2); /* Align with container */
+        }
+
+        .logo-header {
+            max-height: 50px;
+            margin-left: 20px; /* Add some margin if container padding isn't enough */
+        }
+
+        nav.main-nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            display: flex; /* Horizontal menu */
+            align-items: center;
+        }
+
+        nav.main-nav ul li {
+            margin-right: 20px;
+        }
+
+        nav.main-nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 10px 15px;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+
+        nav.main-nav ul li a:hover,
+        nav.main-nav ul li a.active {
+            background-color: #004d40; /* Darkest turquoise for hover/active */
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 0 auto 30px auto; /* Adjusted margin-top to 0 as header has margin-bottom */
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+
+        h1, h2, h3 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+        h1 {
+            text-align: center;
+            margin-top: 0;
+            font-size: 2em;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #00A99D;
+        }
+        h2 {
+            font-size: 1.6em;
+            margin-top: 40px;
+            border-bottom: 2px solid #00A99D;
+            padding-bottom: 10px;
+            text-align: left;
+        }
+        h3 {
+            font-size: 1.3em;
+            text-align: left;
+            margin-top: 25px;
+            color: #00796b;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 25px;
+        }
+        th, td {
+            border: 1px solid #e0e0e0;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #00A99D;
+            color: white;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .actions a {
+            margin-right: 10px;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .actions a.edit {
+            background-color: #f39c12;
+            color: white;
+        }
+        .actions a.delete {
+            background-color: #e74c3c;
+            color: white;
+        }
+        .form-container {
+            margin-bottom: 30px;
+            padding: 25px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            background-color: #fdfdfd;
+        }
+        .form-container label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+        }
+        .form-container input[type="text"],
+        .form-container input[type="number"] {
+            width: calc(100% - 24px);
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .form-container button {
+            padding: 12px 20px;
+            background-color: #00A99D;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+        }
+        .form-container button:hover {
+            background-color: #007a70;
+        }
+        .error {
+            color: #e74c3c;
+            background-color: #fdd;
+            padding: 10px;
+            border: 1px solid #e74c3c;
+            border-radius: 4px;
+            margin-bottom: 15px;
+        }
+        .empty-message {
+            text-align: center;
+            color: #777;
+            padding: 20px;
+            border: 1px dashed #ccc;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+
+<header class="header-container">
+    <img th:src="@{/images/logo.png}" alt="Logo de la Empresa" class="logo-header" />
+    <nav class="main-nav">
+        <ul>
+            <li><a th:href="@{/distritos}" class="active">Panel Principal</a></li>
+            <li><a th:href="@{/distritos#gestion-distritos}">Distritos</a></li>
+            <li><a th:href="@{/distritos#gestion-roles}">Roles</a></li>
+            <li><a th:href="@{/distritos#gestion-estados-entrega}">Estados de Entrega</a></li>
+            <!-- Add more links here for future entities -->
+        </ul>
+    </nav>
+</header>
+
+<div class="container">
+    <h1>Panel de Gestión</h1>
+
+    <!-- Sección de Gestión de Distritos -->
+    <section id="gestion-distritos">
+        <h2>Gestión de Distritos</h2>
+
+        <div th:if="${param.errorDistrito == 'notfound'}" class="error">
+            <p>Error: Distrito no encontrado.</p>
+        </div>
+
+        <div class="form-container">
+            <h3>Agregar Nuevo Distrito</h3>
+            <form th:action="@{/distritos/distrito/agregar}" th:object="${distritoNuevo}" method="post">
+                <div>
+                    <label for="nombreDistritoNuevo">Nombre:</label>
+                    <input type="text" id="nombreDistritoNuevo" th:field="*{nombre}" required placeholder="Ej: Miraflores" />
+                </div>
+                <button type="submit">Guardar Distrito</button>
+            </form>
+        </div>
+
+        <h3>Lista de Distritos</h3>
+        <div th:if="${distritos.isEmpty()}" class="empty-message">
+            <p>No hay distritos para mostrar. ¡Agrega uno nuevo!</p>
+        </div>
+        <table th:unless="${distritos.isEmpty()}">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Acciones</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="distrito : ${distritos}">
+                <td th:text="${distrito.id}">1</td>
+                <td th:text="${distrito.nombre}">Nombre Distrito</td>
+                <td class="actions">
+                    <a th:href="@{/distritos/distrito/editar/{id}(id=${distrito.id})}" class="edit">Editar</a>
+                    <a th:href="@{/distritos/distrito/eliminar/{id}(id=${distrito.id})}" class="delete" onclick="return confirm('¿Estás seguro de que quieres eliminar este distrito?');">Eliminar</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- Sección de Gestión de Roles -->
+    <section id="gestion-roles">
+        <h2>Gestión de Roles</h2>
+
+        <div th:if="${param.errorRol == 'notfound'}" class="error">
+            <p>Error: Rol no encontrado.</p>
+        </div>
+
+        <div class="form-container">
+            <h3>Agregar Nuevo Rol</h3>
+            <form th:action="@{/roles/agregar}" th:object="${rolNuevo}" method="post">
+                <div>
+                    <label for="nombreRolNuevo">Nombre del Rol:</label>
+                    <input type="text" id="nombreRolNuevo" th:field="*{rolName}" required placeholder="Ej: ADMINISTRADOR" />
+                </div>
+                <button type="submit">Guardar Rol</button>
+            </form>
+        </div>
+
+        <h3>Lista de Roles</h3>
+        <div th:if="${roles.isEmpty()}" class="empty-message">
+            <p>No hay roles para mostrar. ¡Agrega uno nuevo!</p>
+        </div>
+        <table th:unless="${roles.isEmpty()}">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre del Rol</th>
+                <th>Acciones</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="rol : ${roles}">
+                <td th:text="${rol.id}">1</td>
+                <td th:text="${rol.rolName}">Nombre Rol</td>
+                <td class="actions">
+                    <a th:href="@{/roles/editar/{id}(id=${rol.id})}" class="edit">Editar</a>
+                    <a th:href="@{/roles/eliminar/{id}(id=${rol.id})}" class="delete" onclick="return confirm('¿Estás seguro de que quieres eliminar este rol?
+');">Eliminar</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- Sección de Gestión de Estados de Entrega -->
+    <section id="gestion-estados-entrega">
+        <h2>Gestión de Estados de Entrega</h2>
+
+        <div th:if="${param.errorEstadoEntrega == 'notfound'}" class="error">
+            <p>Error: Estado de Entrega no encontrado.</p>
+        </div>
+
+        <div class="form-container">
+            <h3>Agregar Nuevo Estado de Entrega</h3>
+            <form th:action="@{/estados-entrega/agregar}" th:object="${estadoEntregaNuevo}" method="post">
+                <div>
+                    <label for="descripcionEstadoEntregaNuevo">Descripción:</label>
+                    <input type="text" id="descripcionEstadoEntregaNuevo" th:field="*{descripcion}" required placeholder="Ej: Pendiente" />
+                </div>
+                <button type="submit">Guardar Estado</button>
+            </form>
+        </div>
+
+        <h3>Lista de Estados de Entrega</h3>
+        <div th:if="${estadosEntrega.isEmpty()}" class="empty-message">
+            <p>No hay estados de entrega para mostrar. ¡Agrega uno nuevo!</p>
+        </div>
+        <table th:unless="${estadosEntrega.isEmpty()}">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Descripción</th>
+                <th>Acciones</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="estado : ${estadosEntrega}">
+                <td th:text="${estado.id}">1</td>
+                <td th:text="${estado.descripcion}">Descripción Estado</td>
+                <td class="actions">
+                    <a th:href="@{/estados-entrega/editar/{id}(id=${estado.id})}" class="edit">Editar</a>
+                    <a th:href="@{/estados-entrega/eliminar/{id}(id=${estado.id})}" class="delete" onclick="return confirm('¿Estás seguro de que quieres eliminar este estado de entrega?');">Eliminar</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </section>
+
+</div>
+
+</body>
+</html>
