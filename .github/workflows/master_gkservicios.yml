@@ -25,12 +25,10 @@ jobs:
           distribution: 'microsoft'
 
       - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
-        working-directory: webconsumidora
+        run: chmod +x ./gradlew
 
       - name: Build with Gradle
         run: ./gradlew build
-        working-directory: webconsumidora
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
